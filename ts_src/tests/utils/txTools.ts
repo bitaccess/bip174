@@ -1,4 +1,4 @@
-import { Transaction as BTransaction } from 'bitcoinjs-lib';
+import { Transaction as BTransaction } from 'bitcoinjs-lib-bigint';
 import { reverseBuffer } from '../../lib/converter/tools';
 import {
   Transaction as ITransaction,

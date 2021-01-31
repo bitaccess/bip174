@@ -1,17 +1,31 @@
 // Number.MAX_SAFE_INTEGER
 const MAX_SAFE_INTEGER = 9007199254740991;
+const MAX_64_BIT_INTEGER = BigInt('18446744073709551615');
 
 function checkUInt53(n: number): void {
   if (n < 0 || n > MAX_SAFE_INTEGER || n % 1 !== 0)
     throw new RangeError('value out of range');
 }
 
+function checkUInt64(n: bigint): void {
+  if (n < 0 || n > MAX_64_BIT_INTEGER)
+    throw new RangeError('value out of range');
+}
+
+function checkSafeUInt(n: number | bigint): void {
+  if (typeof n === 'number') {
+    checkUInt53(n);
+  } else {
+    checkUInt64(n);
+  }
+}
+
 export function encode(
-  _number: number,
+  _number: number | bigint,
   buffer?: Buffer,
   offset?: number,
 ): Buffer {
-  checkUInt53(_number);
+  checkSafeUInt(_number);
 
   if (!buffer) buffer = Buffer.allocUnsafe(encodingLength(_number));
   if (!Buffer.isBuffer(buffer))
@@ -20,33 +34,37 @@ export function encode(
 
   // 8 bit
   if (_number < 0xfd) {
-    buffer.writeUInt8(_number, offset);
+    buffer.writeUInt8(Number(_number), offset);
     Object.assign(encode, { bytes: 1 });
 
     // 16 bit
   } else if (_number <= 0xffff) {
     buffer.writeUInt8(0xfd, offset);
-    buffer.writeUInt16LE(_number, offset + 1);
+    buffer.writeUInt16LE(Number(_number), offset + 1);
     Object.assign(encode, { bytes: 3 });
 
     // 32 bit
   } else if (_number <= 0xffffffff) {
     buffer.writeUInt8(0xfe, offset);
-    buffer.writeUInt32LE(_number, offset + 1);
+    buffer.writeUInt32LE(Number(_number), offset + 1);
     Object.assign(encode, { bytes: 5 });
 
     // 64 bit
   } else {
     buffer.writeUInt8(0xff, offset);
-    buffer.writeUInt32LE(_number >>> 0, offset + 1);
-    buffer.writeUInt32LE((_number / 0x100000000) | 0, offset + 5);
+    if (typeof _number === 'number') {
+      buffer.writeUInt32LE(_number >>> 0, offset + 1);
+      buffer.writeUInt32LE((_number / 0x100000000) | 0, offset + 5);
+    } else {
+      buffer.writeBigUInt64LE(_number || BigInt(0), offset + 1);
+    }
     Object.assign(encode, { bytes: 9 });
   }
 
   return buffer;
 }
 
-export function decode(buffer: Buffer, offset?: number): number {
+export function decode(buffer: Buffer, offset?: number): number | bigint {
   if (!Buffer.isBuffer(buffer))
     throw new TypeError('buffer must be a Buffer instance');
   if (!offset) offset = 0;
@@ -71,17 +89,12 @@ export function decode(buffer: Buffer, offset?: number): number {
     // 64 bit
   } else {
     Object.assign(decode, { bytes: 9 });
-    const lo = buffer.readUInt32LE(offset + 1);
-    const hi = buffer.readUInt32LE(offset + 5);
-    const _number = hi * 0x0100000000 + lo;
-    checkUInt53(_number);
-
-    return _number;
+    return buffer.readBigUInt64LE(offset + 1);
   }
 }
 
-export function encodingLength(_number: number): number {
-  checkUInt53(_number);
+export function encodingLength(_number: number | bigint): number {
+  checkSafeUInt(_number);
 
   return _number < 0xfd
     ? 1

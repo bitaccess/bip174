@@ -90,7 +90,7 @@ export interface Bip32Derivation {
 
 export interface WitnessUtxo {
   script: Buffer;
-  value: number;
+  value: bigint;
 }
 
 export type NonWitnessUtxo = Buffer;
@@ -127,7 +127,7 @@ export type TransactionInputAdder = (
 
 export interface TransactionOutput {
   script: Buffer;
-  value: number;
+  value: bigint;
 }
 
 export type TransactionOutputAdder = (

@@ -19,7 +19,7 @@ export function psbtFromBuffer(
   let offset = 0;
 
   function varSlice(): Buffer {
-    const keyLen = varuint.decode(buffer, offset);
+    const keyLen = Number(varuint.decode(buffer, offset));
     offset += varuint.encodingLength(keyLen);
     const key = buffer.slice(offset, offset + keyLen);
     offset += keyLen;

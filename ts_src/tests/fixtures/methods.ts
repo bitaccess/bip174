@@ -55,7 +55,12 @@ export const fixtures = {
       addInputOutput: true,
       args: [
         0,
-        { witnessUtxo: { script: Buffer.from([1, 2, 3]), value: 1234567890 } },
+        {
+          witnessUtxo: {
+            script: Buffer.from([1, 2, 3]),
+            value: BigInt(1234567890),
+          },
+        },
       ],
       expected:
         'cHNidP8BAFMBAAAAAdSnb/ld4fTAFho+U+qHapHtlTMa6NAS2B+XE4SYzl2GAwAAAAD/' +
@@ -232,7 +237,7 @@ export const fixtures = {
             '0102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f00',
             'hex',
           ),
-          value: 3,
+          value: BigInt(3),
         },
       ],
       expected:
@@ -300,7 +305,12 @@ export const fixtures = {
       twice: true,
       args: [
         0,
-        { witnessUtxo: { script: Buffer.from([1, 2, 3]), value: 1234567890 } },
+        {
+          witnessUtxo: {
+            script: Buffer.from([1, 2, 3]),
+            value: BigInt(1234567890),
+          },
+        },
       ],
       exception: 'Can not add duplicate data to input',
     },
@@ -439,7 +449,7 @@ export const fixtures = {
             '0102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f00',
             'hex',
           ),
-          value: 3,
+          value: BigInt(3),
           unknownKeyVals: 34,
         },
       ],

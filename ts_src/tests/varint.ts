@@ -39,7 +39,7 @@ fixtures.invalid.forEach((fixture, i) => {
     t.end();
   });
 
-  if (fixture.hex) {
+  if ((fixture as any).hex) {
     test('invalid decode #' + (i + 1), t => {
       t.throws(() => {
         // @ts-ignore

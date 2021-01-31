@@ -17,14 +17,14 @@ tape('Test: add Input Output', t => {
       'a914e18870f2c297fbfca54c5c6f645c7745a5b66eda87',
       'hex',
     ),
-    value: 1234567890,
+    value: BigInt(1234567890),
   });
   psbt.addOutput({
     script: Buffer.from(
       'a914e18870f2c297fbfca54c5c6f645c7745a5b66eda87',
       'hex',
     ),
-    value: 987654321,
+    value: BigInt(987654321),
   });
   const hex = psbt.toHex();
   const hex2 = Psbt.fromHex(hex, transactionFromBuffer).toHex();
