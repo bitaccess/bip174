@@ -28,7 +28,7 @@ exports.fixtures = [
         {
           witnessUtxo: {
             script: 'a9146345200f68d189e1adc0df1c4d16ea8f14c0dbeb87',
-            value: 199909013,
+            value: BigInt(199909013),
           },
           partialSig: [
             {

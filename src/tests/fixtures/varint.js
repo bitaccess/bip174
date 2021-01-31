@@ -58,15 +58,18 @@ exports.fixtures = {
       dec: 9007199254740991,
       hex: 'ffffffffffffff1f00',
     },
+    {
+      dec: 9007199254740992,
+      hex: 'ffffffffff00002000',
+    },
+    {
+      dec: BigInt('18446744073709551615'),
+      hex: 'fffffffffffffffff',
+    },
   ],
   invalid: [
     {
       dec: -1,
-      msg: '^RangeError: value out of range$',
-    },
-    {
-      dec: 9007199254740992,
-      hex: 'ffffffffff00002000',
       msg: '^RangeError: value out of range$',
     },
     {
