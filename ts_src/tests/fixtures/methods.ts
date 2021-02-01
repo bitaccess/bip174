@@ -297,7 +297,7 @@ export const fixtures = {
       ],
       exception:
         'Data for input key witnessUtxo is incorrect: Expected { ' +
-        'script: Buffer; value: number; } and got',
+        'script: Buffer; value: bigint; } and got',
     },
     {
       method: 'updateInput',
@@ -309,6 +309,21 @@ export const fixtures = {
           witnessUtxo: {
             script: Buffer.from([1, 2, 3]),
             value: BigInt(1234567890),
+          },
+        },
+      ],
+      exception: 'Can not add duplicate data to input',
+    },
+    {
+      method: 'updateInput',
+      addInputOutput: true,
+      twice: true,
+      args: [
+        0,
+        {
+          witnessUtxo: {
+            script: Buffer.from([1, 2, 3]),
+            value: BigInt('0xffffffffffffffff'),
           },
         },
       ],

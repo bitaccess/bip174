@@ -1,8 +1,8 @@
 import * as tape from 'tape';
 import { Psbt } from '../lib/psbt';
 import { fixtures } from './fixtures/methods';
+import { parse, stringify } from './utils/json';
 import { getDefaultTx } from './utils/txTools';
-const BJSON = require('buffer-json');
 
 function run(f: any, typ: string): void {
   tape(`check ${typ} method: ${f.method}`, t => {
@@ -20,25 +20,22 @@ function run(f: any, typ: string): void {
     try {
       psbt = func(...f.args);
       if (f.twice) {
-        const dup = JSON.parse(
-          BJSON.stringify(f.args),
-          (key: string, value: any) => {
-            if (
-              key &&
-              value &&
-              value.type &&
-              value.type === 'Buffer' &&
-              value.data.startsWith('base64:')
-            ) {
-              const buf = Buffer.from(value.data.slice(7), 'base64');
-              if (['pubkey', 'extendedPubkey'].indexOf(key) > -1) {
-                buf[2] = 0xff;
-              }
-              return buf;
+        const dup = parse(stringify(f.args), (key: string, value: any) => {
+          if (
+            key &&
+            value &&
+            value.type &&
+            value.type === 'Buffer' &&
+            value.data.startsWith('base64:')
+          ) {
+            const buf = Buffer.from(value.data.slice(7), 'base64');
+            if (['pubkey', 'extendedPubkey'].indexOf(key) > -1) {
+              buf[2] = 0xff;
             }
-            return value;
-          },
-        );
+            return buf;
+          }
+          return value;
+        });
         psbt = func(...dup);
       }
       if (f.exception) {
@@ -46,7 +43,10 @@ function run(f: any, typ: string): void {
         return t.end();
       }
     } catch (err) {
-      if (!f.exception) throw err;
+      if (!f.exception) {
+        console.log(f);
+        throw err;
+      }
       t.throws(() => {
         if (err) throw err;
       }, new RegExp(f.exception));

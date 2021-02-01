@@ -47,24 +47,24 @@ exports.fixtures = {
       hex: 'feffffffff',
     },
     {
-      dec: 4294967296,
+      dec: BigInt(4294967296),
       hex: 'ff0000000001000000',
     },
     {
-      dec: 4294967297,
+      dec: BigInt(4294967297),
       hex: 'ff0100000001000000',
     },
     {
-      dec: 9007199254740991,
+      dec: BigInt(9007199254740991),
       hex: 'ffffffffffffff1f00',
     },
     {
-      dec: 9007199254740992,
-      hex: 'ffffffffff00002000',
+      dec: BigInt(9007199254740992),
+      hex: 'ff0000000000002000',
     },
     {
       dec: BigInt('18446744073709551615'),
-      hex: 'fffffffffffffffff',
+      hex: 'ffffffffffffffffff',
     },
   ],
   invalid: [

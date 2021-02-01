@@ -3,8 +3,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const tape = require('tape');
 const psbt_1 = require('../lib/psbt');
 const methods_1 = require('./fixtures/methods');
+const json_1 = require('./utils/json');
 const txTools_1 = require('./utils/txTools');
-const BJSON = require('buffer-json');
 function run(f, typ) {
   tape(`check ${typ} method: ${f.method}`, t => {
     let func;
@@ -21,7 +21,7 @@ function run(f, typ) {
     try {
       psbt = func(...f.args);
       if (f.twice) {
-        const dup = JSON.parse(BJSON.stringify(f.args), (key, value) => {
+        const dup = json_1.parse(json_1.stringify(f.args), (key, value) => {
           if (
             key &&
             value &&
@@ -44,7 +44,10 @@ function run(f, typ) {
         return t.end();
       }
     } catch (err) {
-      if (!f.exception) throw err;
+      if (!f.exception) {
+        console.log(f);
+        throw err;
+      }
       t.throws(() => {
         if (err) throw err;
       }, new RegExp(f.exception));
