@@ -33,7 +33,7 @@
     "@types/json-bigint": "^1.0.0",
     "@types/node": "12.0.8",
     "@types/tape": "4.2.33",
-    "bitcoinjs-lib-bigint": "github:go-faast/bitcoinjs-lib#bigint6_1",
+    "bitcoinjs-lib-bigint": "github:bitaccess/bitcoinjs-lib#bigintv6_1",
     "buffer-json": "^2.0.0",
     "json-bigint": "^1.0.0",
     "nyc": "^14.1.1",
