@@ -8,7 +8,7 @@
     "src/lib"
   ],
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "build": "npm run clean && tsc -p ./tsconfig.json && rimraf 'src/tests/**/*.d.ts' && npm run formatjs",
